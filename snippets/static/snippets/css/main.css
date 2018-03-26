@@ -1,0 +1,79 @@
+.tag {
+    display: inline-block;
+    margin: 3px;
+    border-radius: 1px;
+    padding: 0 5px 0 5px;
+    background: #cccccc;
+    font-size: small;
+}
+
+.tag-div {
+    display: inline-block;
+}
+
+.tag-input {
+    display: inline-block;
+    border: none;
+    background: #eeeeee;
+    padding: 0 5px 0 5px;
+}
+
+.tag-input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.tag-close {
+    border: none;
+    background: none;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.tag-close:hover {
+    font-weight: bold;
+    text-shadow: 0px 0px 2px rgba(255, 255, 255,.7);
+}
+
+img {
+    max-width: 100%;
+    max-heigth: 100%;
+}
+
+.CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+}
+
+.CodeMirror-scroll {
+    height: auto;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.snippet-summary {
+    padding-left: 1em;
+}
+
+a {
+    color: darkcyan ;
+}
+
+a:hover {
+    text-decoration: none;
+    color: dodgerblue;
+}
+
+hr {
+    margin-top: 0.5rem;
+}
+
+.page-header h5 {
+    display: inline-block;
+    width: auto;
+    font-family: monospace;
+}
+
+.page-header a {
+    display: inline-block;
+    float: right;
+}

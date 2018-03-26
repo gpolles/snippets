@@ -1,0 +1,83 @@
+{% extends 'snippets/base.html' %}
+
+{% block title %} Snippets {% endblock %}
+
+{% block head_block %}
+
+<script type="text/javascript">
+
+  $( document ).ready( function() {
+    $('#tag-selection').change( function() {
+      if ( $('#tag-selection').val().indexOf('__all__') > -1 ) {
+        $('#tag-selection').val(['__all__']);
+      }
+      window.location = ( 
+        '/snippets/?tags=' + 
+        encodeURIComponent($('#tag-selection').val()) + 
+        '&p=1'
+      );
+    })
+  });
+</script>
+
+{% endblock %}
+
+{% block body_block %}
+  <div class="page-header" style="padding-top: 50px">
+    <h5>All snippets</h5>
+    <a class="btn btn-sm btn-primary " href="/snippets/snippet/new/"><i class="fas fa-plus"></i> new snippet</a>
+  </div>
+  <hr/>
+  <div class="row">
+    <div class="col col-md-8">
+      <div class="snippets-container">
+        {% if page %}
+          {% for snippet in page %}
+            <div class="snippet-summary">
+              <a href="view/{{ snippet.id }}/"><h6>{{ snippet.title }}</h6></a> 
+              <div class="tag-div">
+                {% for tag in snippet.tags.all %}<span class="tag label label-default" style="background: {{ tag.color }};">{{ tag.name }}</span>{% endfor %}
+              </div>        
+            </div>
+            <hr />
+          {% endfor %}
+        {% else %}
+          <p>No snippets.</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col col-md-4">
+      <div class="snippets-filters">
+        <label for="tag-selection">Filter by tags:</label>
+        <select id="tag-selection" class="form-control" size="{{ tags.count }}" multiple>
+          <option value="__all__" id="tag-all-option" 
+            {% if not query_tags %}selected{% endif %}
+            >--ALL--</option>
+          {% for tag in tags %}
+            <option value="{{ tag.id }}" 
+              {% if tag.id in query_tags %}selected{% endif %}
+              >{{ tag }} ({{ tag.snippet__count }})</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+  
+  {% if page.has_previous or page.has_next %}
+  <hr/>
+  <div class="row">
+    <div class="col col-md-8">
+      <div class="text-center">
+        {% if page.has_previous %}<a href="?tags={{ query_tags_string }}&amp;p={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+        |
+        <span class="current">
+          Page {{ page.number }} of {{ page.paginator.num_pages }}
+        </span>
+        |
+        {% if page.has_next %}<a href="?tags={{ query_tags_string }}&amp;p={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+{% endblock %}

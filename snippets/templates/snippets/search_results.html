@@ -1,0 +1,36 @@
+{% extends 'snippets/base.html' %}
+
+{% block body_block %}
+
+    
+
+  {% if query %}
+    <div class="page-header" style="padding-top: 50px">
+      <h5>Search results for "{{ query }}"</h5>
+    </div>
+      <hr/>
+      {% for result in page.object_list %}
+        <div class="snippet-summary">
+          <a href="view/{{ result.object.id }}/"><h6>{{ result.object.title }}</h6></a> 
+          <div class="tag-div">
+            {% for tag in result.object.tags.all %}<span class="tag label label-default" style="background: {{ tag.color }};">{{ tag.name }}</span>{% endfor %}
+          </div>        
+        </div>
+        <hr />
+      {% empty %}
+        <p>No results found.</p>
+      {% endfor %}
+
+      {% if page.has_previous or page.has_next %}
+          <div>
+            {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+            |
+            {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+          </div>
+      {% endif %}
+  {% else %}
+      {# Show some example queries to run, maybe query syntax, something else? #}
+  {% endif %}
+
+
+{% endblock %}

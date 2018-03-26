@@ -1,0 +1,3 @@
+{{ object.title }}
+{% for t in object.tags.all %} {{ t }} {% endfor %}
+{{ object.language }}

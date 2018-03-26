@@ -1,0 +1,154 @@
+{% load static %}
+{% load tz %}
+{% localtime on %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="shortcut icon" href="{% static 'snippets/pics/favicon.ico' %}" type="image/x-icon"> 
+
+  <title>{% block title %}Snippets{% endblock %}</title>
+
+  <!-- JQUERY -->
+  <script src="{% static 'snippets/js/jquery-3.3.1.min.js' %}"></script>
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <!-- BOOTSTRAP -->
+  <script src="{% static 'snippets/js/bootstrap.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'snippets/css/bootstrap.min.css' %}"">
+
+  <script src="{% static 'snippets/js/fontawesome-all.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'snippets/css/fontawesome-all.min.css' %}"">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" integrity="sha384-jmxIlussZWB7qCuB+PgKG1uLjjxbVVIayPJwi6cG6Zb4YKq0JIw+OMnkkEC7kYCq" crossorigin="anonymous"></script>
+
+
+  {% block head_block %}{% endblock %}
+
+
+  <link rel="stylesheet" href="{% static 'snippets/css/main.css' %}">
+  
+</head>
+
+<body>
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">  
+
+  <div class="container">
+    <a class="navbar-brand" href="/snippets/">
+      <!-- <span><img src="{% static 'snippets/pandabooks.ico' %}" height="25" width="25"></span> -->
+      <span style="color:darkcyan; font-family: Monospace;"><i class="fas fa-terminal"></i> Snippet 0.1 </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <form class="form-inline" action="/snippets/search_results/" method="get">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+            <input type="hidden" name="p" value="0">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </li>
+      </ul>
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+          <li class="nav-item"> 
+            <span class="navbar-text  text-nowrap"><small><strong>{{ user.username }}</strong>
+              (<a href="/snippets/accounts/logout/">logout</a>)
+            </small>
+            </span>
+          </li> 
+        {% else %}
+          <li class="nav-item"> 
+            <a class="nav-link" href="/snippets/accounts/login/">
+              Log in
+            </a>
+          </li> 
+        {% endif %}
+        <li class="nav-item"><small>
+        <a class="nav-link" href="/admin/" target="_blank">[admin]</a></small></li>
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+&nbsp;
+  {% block body_block %}{% endblock %}
+
+  <div class="modal fade" id="base-modal-window" tabindex="-1" role="dialog" aria-labelledby="base-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="base-modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="base-modal-body">
+          <p>Modal body text goes here.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="base-modal-btn-ok">Ok</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="base-modal-title-btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- set the csrf token so I can use ajax -->
+  <script src="{% static 'snippets/js/csrf.js' %}"></script>
+
+  <script type="text/javascript">  
+
+    var BaseModal = new function () {
+      var self = this;
+      self.modal = $('#base-modal-window');
+      self.title = $('#base-modal-title');
+      self.body = $('#base-modal-body');
+      self.ok_btn = $('#base-modal-btn-ok');
+      self.cancel_btn = $('#base-modal-title-btn-cancel');
+      self.show = function() {
+        self.modal.modal('show');
+      }
+      self.hide = function() {
+        self.modal.modal('hide');
+      }
+      self.on_ok = function() {};
+      self.on_cancel = function() {}
+      self.ok_btn.on('click', function() {
+        self.on_ok();
+        self.hide();
+      })
+      self.cancel_btn.on('click', function() {
+        self.on_cancel();
+      })
+    }
+
+
+  </script>
+
+</div>
+
+</body>
+</html>
+{% endlocaltime %}
