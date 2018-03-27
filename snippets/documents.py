@@ -3,8 +3,6 @@ from .models import Snippet
 import xml.etree
 from elasticsearch_dsl import analyzer
 
-def strip_html(text):
-    ''.join(xml.etree.ElementTree.fromstring(text).itertext())
 
 # Name of the Elasticsearch index
 index = Index('snippets')
@@ -31,13 +29,40 @@ class SnippetDocument(DocType):
     class Meta:
         model = Snippet # The model associated with this DocType
 
-        
-
-        # Ignore auto updating of Elasticsearch when a model is saved
-        # or deleted:
-        # ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
-        # auto_refresh = False
-        # Paginate the django queryset used to populate the index with the specified size
-        # (by default there is no pagination)
-        # queryset_pagination = 5000
+# This setting should be more conservative, when searching for Snippets.
+# {
+#   "index": {
+#     "index": "my_idx",
+#     "type": "my_type",
+#     "analysis": {
+#       "index_analyzer": {
+#         "my_index_analyzer": {
+#           "type": "custom",
+#           "tokenizer": "standard",
+#           "filter": [
+#             "lowercase",
+#             "mynGram"
+#           ]
+#         }
+#       },
+#       "search_analyzer": {
+#         "my_search_analyzer": {
+#           "type": "custom",
+#           "tokenizer": "standard",
+#           "filter": [
+#             "standard",
+#             "lowercase",
+#             "mynGram"
+#           ]
+#         }
+#       },
+#       "filter": {
+#         "mynGram": {
+#           "type": "nGram",
+#           "min_gram": 2,
+#           "max_gram": 50
+#         }
+#       }
+#     }
+#   }
+# }

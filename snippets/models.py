@@ -1,15 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .utils import html_to_clean_lowercase
 
 import json
 
 MODELVERSION = '0.0.1'
-import re
-
-TAG_RE = re.compile(r'<[^>]+>')
-
-def strip_html(text):
-    return TAG_RE.sub('', text)
 
 
 # Create your models here.
@@ -48,7 +43,7 @@ class Snippet(models.Model):
         tagtext = ' '.join([ tag.name for tag in self.tags.all() ])
         text = " ".join([ 
             self.title, 
-            strip_html(self.description), 
+            html_to_clean_lowercase(self.description), 
             tagtext 
         ])
         return text

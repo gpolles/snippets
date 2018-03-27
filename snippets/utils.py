@@ -35,3 +35,24 @@ def clean_html(input_html):
             lxml.html.fromstring(input_html)
         )
     ).decode("utf-8")
+
+import re
+
+TAG_RE = re.compile(r'<[^>]+>')
+
+def html_to_clean_lowercase(text):
+    # while removing tags, it will also remove spacing
+    # this will add spaces (maybe a lot) between stuff
+    # separated by html tags
+    text = text.replace('<', ' <')
+    text = lxml.html.tostring(
+            lxml.html.fromstring(text),
+            method='text', 
+            encoding='unicode'
+    )
+    # collapse whitespaces and punctuation. Note that
+    # it will leave only letters, digits and underscores
+    rex = re.compile(r'\W+')
+    text = rex.sub(' ', text).lower().strip()
+    return text
+    
