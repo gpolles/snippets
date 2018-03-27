@@ -17,5 +17,5 @@ urlpatterns = [
     url(r'^comments/edit/(?P<uid>[0-9]+)/$', views.comment_edit, 
         name='comment_edit'),
     url(r'^search_results/$', views.search_result_view, name='search'),
-    url(r'^search/', include('haystack.urls')),
+#    url(r'^search/', include('haystack.urls')),
 ]

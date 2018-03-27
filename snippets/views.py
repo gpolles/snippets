@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from haystack.query import SearchQuerySet
 from django.core.paginator import Paginator, InvalidPage
 from django.db.models import Count
 from django.http import Http404
@@ -11,6 +10,10 @@ from .models import *
 from .forms import *
 from .ajax import *
 from .utils import basic_serialize, clean_html
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
+
+client = Elasticsearch()
 
 def index(request):
     query_tags = request.GET.get('tags', '').split(',')
@@ -236,10 +239,27 @@ def search_request(request):
     })
 
 def search_result_view(request):
-
     query = request.GET.get('q')
     p = request.GET.get('p', 1)
-    res = SearchQuerySet().filter(content=query)
+    response = client.search(
+        index="snippets",
+        body={
+            "query": { 
+                "match": {
+                    "text": query,
+                } 
+            }
+        }
+    )
+
+    res = [
+        Snippet.objects.get(pk=i['_id']) 
+        for i in response['hits']['hits']
+    ]
+
+    import sys
+    for i in response['hits']['hits']:
+        print(i, file=sys.stderr)
     
     paginator = Paginator(res, 25) # Show 25 contacts per page
     try:

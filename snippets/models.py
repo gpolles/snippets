@@ -4,6 +4,13 @@ from django.contrib.auth.models import User
 import json
 
 MODELVERSION = '0.0.1'
+import re
+
+TAG_RE = re.compile(r'<[^>]+>')
+
+def strip_html(text):
+    return TAG_RE.sub('', text)
+
 
 # Create your models here.
 class Language(models.Model):
@@ -36,6 +43,15 @@ class Snippet(models.Model):
 
     def __str__(self):
         return self.title
+
+    def search_text(self):
+        tagtext = ' '.join([ tag.name for tag in self.tags.all() ])
+        text = " ".join([ 
+            self.title, 
+            strip_html(self.description), 
+            tagtext 
+        ])
+        return text
 
 class Comment(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)  

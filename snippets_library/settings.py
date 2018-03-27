@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',    
     'widget_tweaks',
     'django_extensions',
-    'haystack',
+    'django_elasticsearch_dsl',
 ]
 
 MIDDLEWARE = [
@@ -90,14 +90,12 @@ DATABASES = {
     }
 }
 
-HAYSTACK_CONNECTIONS = {
+ELASTICSEARCH_DSL={
     'default': {
-        'ENGINE': 'xapian_backend.XapianEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'xapian_index'),
+        'hosts': 'localhost:9200'
     },
 }
-
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = 'django_elasticsearch_dsl.signals.RealTimeSignalProcessor'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
