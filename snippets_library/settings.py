@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+import json
+try:
+    with open('/etc/django_snippets_settings.json') as f:
+        server_settings = json.load(f)
+except:
+    server_settings = {}
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,27 +30,34 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = '-wav^7_hcbwl0+b&5r)#i)6s=t4$908umdj$@pg0^=++6bmkdb'
-SECRET_KEY = os.environ.get('SECRET_KEY', '-wav^7_hcbwl0+b&5r)#i)6s=t4$908umdj$@pg0^=++6bmkdb')
+SECRET_KEY = server_settings.get('secret_key', '-wav^7_hcbwl0+b&5r)#i)6s=t4$908umdj$@pg0^=++6bmkdb')
 
 LOGIN_REDIRECT_URL = '/snippets/'
 
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
 
-ALLOWED_HOSTS = []
+
+DEBUG = bool( server_settings.get('debug', True) )
+
+
+ALLOWED_HOSTS = [
+        'localhost', '127.0.0.1', '[::1]',
+        '192.168.1.17',
+        'gpanda.ddns.net'
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'snippets.apps.SnippetsConfig',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',    
-    'widget_tweaks',
     'django_extensions',
     'django_elasticsearch_dsl',
 ]
@@ -83,12 +96,25 @@ WSGI_APPLICATION = 'snippets_library.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'db_user' not in server_settings:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        },
     }
-}
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'snippets',
+            'USER': server_settings.get('db_user'),
+            'PASSWORD': server_settings.get('db_password'),
+            'HOST': 'gpanda.ddns.net',
+            'PORT': '',
+        }
+    }
 
 ELASTICSEARCH_DSL={
     'default': {
@@ -133,5 +159,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/snippets/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
