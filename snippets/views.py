@@ -88,6 +88,7 @@ def snippet_new(request):
     }
     return render(request, 'snippets/forms/snippet_new.html', context)
 
+@login_required(login_url='/snippets/accounts/login/')
 def snippet_edit(request, uid):
     snippet = get_object_or_404(Snippet, pk=uid)
     history = json.loads(snippet.history)

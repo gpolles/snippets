@@ -34,7 +34,7 @@
         {% if page %}
           {% for snippet in page %}
             <div class="snippet-summary">
-              <a href="view/{{ snippet.id }}/"><h6>{{ snippet.title }}</h6></a> 
+		    <a href="{% url 'snippet_view' snippet.id %}"><h6>{{ snippet.title }}</h6></a> 
               <div class="tag-div">
                 {% for tag in snippet.tags.all %}<span class="tag label label-default" style="background: {{ tag.color }};">{{ tag.name }}</span>{% endfor %}
               </div>        

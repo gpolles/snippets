@@ -9,7 +9,7 @@
       <hr/>
       {% for result in page.object_list %}
         <div class="snippet-summary">
-          <a href="/view/{{ result.id }}/"><h6 class="search-result">{{ result.title }}</h6></a> 
+		<a href="{% url 'snippet_view' snippet.id %}"><h6 class="search-result">{{ result.title }}</h6></a> 
           <div class="tag-div">
             {% for tag in result.tags.all %}<span class="tag label label-default search-result" style="background: {{ tag.color }};">{{ tag.name }}</span>{% endfor %}
           </div>        
