@@ -51,3 +51,6 @@ xapian_index
 # database
 *.sqlite3
 
+# collected static
+
+static/

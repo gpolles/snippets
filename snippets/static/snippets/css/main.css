@@ -77,3 +77,20 @@ hr {
     display: inline-block;
     float: right;
 }
+
+#snippet-description pre {
+    background-color: #23241f;
+    border-radius: 3px;
+    padding: 5px 10px;
+    color: #f8f8f2;
+    margin: 5px;
+    overflow: visible;
+    white-space: pre-wrap;
+}
+
+#snippet-description {
+    margin-bottom: 1em;
+    border-radius: 5px;
+    background-color: #f3f2f5;
+    padding: 1em;
+}
